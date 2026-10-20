@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#A60002">
+  <title>وطن تِك | منصة الانتساب</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --red: #A60002;
+      --dark: #151515;
+      --gray: #f4f5f7;
+      --white: #ffffff;
+      --border: #e1e4e8;
+      --text: #292929;
+      --muted: #6c727f;
+      --green: #137547;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      color: var(--text);
+      background: var(--gray);
+      line-height: 1.8;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: wait; opacity: .7; }
+
+    .topbar {
+      background: var(--dark);
+      color: var(--white);
+      padding: 14px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .brand { font-weight: 800; font-size: 20px; }
+    .brand span { color: #ff5555; }
+    .topbar small { color: #ddd; }
+
+    .hero {
+      background: linear-gradient(135deg, #171717, #3b0809);
+      color: white;
+      padding: 65px 20px;
+      text-align: center;
+    }
+
+    .hero .tag {
+      display: inline-block;
+      padding: 5px 16px;
+      border: 1px solid #ffffff50;
+      border-radius: 30px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+
+    .hero h1 span { color: #ff5555; }
+
+    .hero p {
+      max-width: 650px;
+      margin: 15px auto 25px;
+      color: #eeeeee;
+    }
+
+    .btn {
+      display: inline-block;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 23px;
+      font-weight: 700;
+      transition: transform .2s, opacity .2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: white; background: var(--red); }
+    .btn-light { color: var(--dark); background: white; }
+    .btn-dark { background: var(--dark); color: white; }
+
+    .container {
+      max-width: 1050px;
+      margin: 30px auto;
+      padding: 0 16px;
+    }
+
+    .section-title {
+      margin: 0 0 7px;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      margin-top: 0;
+    }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin: 25px 0 35px;
+    }
+
+    .field-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 10px;
+      text-align: center;
+      font-weight: 700;
+      box-shadow: 0 4px 15px #00000005;
+    }
+
+    .field-card .icon {
+      display: block;
+      font-size: 29px;
+      margin-bottom: 8px;
+    }
+
+    .panel {
+      background: white;
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 25px #00000005;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .form-group { min-width: 0; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .required { color: var(--red); }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d9dde3;
+      border-radius: 9px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px #a6000212;
+    }
+
+    textarea { resize: vertical; min-height: 100px; }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .consent {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    .consent input {
+      width: 18px;
+      height: 18px;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .consent label { font-weight: 400; margin: 0; }
+
+    .form-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .status-box {
+      display: none;
+      margin-top: 18px;
+      border-radius: 10px;
+      padding: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .status-box p { margin: 7px 0; }
+    .status-box.success {
+      display: block;
+      background: #e9f8ef;
+      border: 1px solid #b6e6c7;
+      color: #145b35;
+    }
+
+    .status-box.error {
+      display: block;
+      background: #fff0f0;
+      border: 1px solid #f0c1c1;
+      color: #8c1616;
+    }
+
+    .status-box.loading {
+      display: block;
+      background: #f0f4ff;
+      border: 1px solid #cbd7ff;
+      color: #23438b;
+    }
+
+    .tracker {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .footer {
+      margin-top: 45px;
+      background: #171717;
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+    }
+
+    .footer p { margin: 4px 0; }
+    .footer small { color: #bbb; }
+
+    @media (max-width: 750px) {
+      .fields-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tracker { grid-template-columns: 1fr; }
+      .hero { padding: 45px 18px; }
+    }
+
+    @media (max-width: 500px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: auto; }
+      .panel { padding: 17px; }
+      .topbar { justify-content: center; text-align: center; }
+      .hero .btn { margin: 4px; }
+      .form-actions .btn { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">WATAN <span>TECH</span></div>
+    <small>منصة الانتساب الإلكتروني</small>
+  </header>
+
+  <section class="hero">
+    <div class="tag">فريق تطوعي أردني</div>
+    <h1>كن جزءًا من <span>وطن تِك</span></h1>
+    <p>
+      نبحث عن أصحاب الطموح والمهارات والأفكار، ممن يرغبون في
+      التعاون والتعلّم والمشاركة في مشاريع ومبادرات تخدم المجتمع.
+    </p>
+    <button type="button" class="btn btn-primary" onclick="scrollToApplication()">
+      قدّم طلب انتساب
+    </button>
+    <button type="button" class="btn btn-light" onclick="scrollToTracker()">
+      متابعة طلب سابق
+    </button>
+  </section>
+
+  <main class="container">
+    <section>
+      <h2 class="section-title">مجالات الفريق</h2>
+      <p class="section-subtitle">
+        اختر المجال الذي يناسب اهتماماتك ومهاراتك عند تعبئة الطلب.
+      </p>
+
+      <div class="fields-grid">
+        <div class="field-card"><span class="icon">🌐</span>اللغات</div>
+        <div class="field-card"><span class="icon">⚕️</span>المجال الطبي والصحي</div>
+        <div class="field-card"><span class="icon">💻</span>المجال التقني</div>
+        <div class="field-card"><span class="icon">🚀</span>باقي مجالات الحياة</div>
+      </div>
+    </section>
+
+    <section class="panel" id="applicationSection">
+      <h2 class="section-title">طلب الانتساب</h2>
+      <p class="section-subtitle">
+        يرجى تعبئة المعلومات بدقة. الحقول التي تحمل علامة
+        <span class="required">*</span> إلزامية.
+      </p>
+
+      <form id="applicationForm">
+        <h3>أولًا: المعلومات الشخصية</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fullName">الاسم الكامل <span class="required">*</span></label>
+            <input id="fullName" name="fullName" required maxlength="150" autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="birthDate">تاريخ الميلاد</label>
+            <input id="birthDate" name="birthDate" type="date">
+          </div>
+
+          <div class="form-group">
+            <label for="governorate">المحافظة</label>
+            <select id="governorate" name="governorate">
+              <option value="">اختر المحافظة</option>
+              <option>عمّان</option>
+              <option>الزرقاء</option>
+              <option>إربد</option>
+              <option>البلقاء</option>
+              <option>مادبا</option>
+              <option>الكرك</option>
+              <option>الطفيلة</option>
+              <option>معان</option>
+              <option>العقبة</option>
+              <option>جرش</option>
+              <option>عجلون</option>
+              <option>المفرق</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">رقم الهاتف <span class="required">*</span></label>
+            <input id="phone" name="phone" type="tel" required maxlength="40" autocomplete="tel">
+          </div>
+
+          <div class="form-group full">
+            <label for="email">البريد الإلكتروني <span class="required">*</span></label>
+            <input id="email" name="email" type="email" required maxlength="200" autocomplete="email">
+          </div>
+        </div>
+
+        <h3>ثانيًا: المعلومات التعليمية</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="education">المؤهل العلمي</label>
+            <select id="education" name="education">
+              <option value="">اختر المؤهل</option>
+              <option>طالب مدرسة</option>
+              <option>دبلوم</option>
+              <option>بكالوريوس</option>
+              <option>ماجستير</option>
+              <option>دكتوراه</option>
+              <option>أخرى</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="specialization">التخصص</label>
+            <input id="specialization" name="specialization" maxlength="150">
+          </div>
+
+          <div class="form-group full">
+            <label for="institution">المؤسسة التعليمية أو جهة العمل</label>
+            <input id="institution" name="institution" maxlength="200">
+          </div>
+        </div>
+
+        <h3>ثالثًا: المهارات والاهتمامات</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="mainField">المجال الرئيسي <span class="required">*</span></label>
+            <select id="mainField" name="mainField" required>
+              <option value="">اختر المجال</option>
+              <option>اللغات</option>
+              <option>المجال الطبي والصحي</option>
+              <option>المجال التقني</option>
+              <option>باقي مجالات الحياة</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="skillLevel">مستوى المهارة</label>
+            <select id="skillLevel" name="skillLevel">
+              <option value="">اختر المستوى</option>
+              <option>مبتدئ</option>
+              <option>متوسط</option>
+              <option>متقدم</option>
+              <option>محترف</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label for="subFields">المجالات الفرعية التي تهتم بها</label>
+            <input id="subFields" name="subFields" maxlength="1000"
+              placeholder="مثال: البرمجة، التصميم، اللغة الإنجليزية">
+          </div>
+
+          <div class="form-group full">
+            <label for="skills">المهارات التي تمتلكها</label>
+            <textarea id="skills" name="skills" maxlength="2000"
+              placeholder="اكتب مهاراتك وخبراتك بإيجاز"></textarea>
+          </div>
+        </div>
+
+        <h3>رابعًا: الخبرات والأعمال السابقة</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="experience">الخبرات أو المشاركات السابقة</label>
+            <textarea id="experience" name="experience" maxlength="3000"
+              placeholder="يمكنك ذكر الأعمال التطوعية أو المشاريع السابقة"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label for="portfolio">روابط الأعمال أو الشهادات</label>
+            <input id="portfolio" name="portfolio" maxlength="1000"
+              placeholder="روابط اختيارية لأعمالك أو ملفك المهني">
+          </div>
+        </div>
+
+        <h3>خامسًا: دوافع الانضمام</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="motivation">
+              لماذا ترغب في الانضمام إلى وطن تِك؟ <span class="required">*</span>
+            </label>
+            <textarea id="motivation" name="motivation" required maxlength="3000"
+              placeholder="أخبرنا عن دوافعك وأهدافك"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label for="contribution">ما الذي يمكنك تقديمه للفريق؟</label>
+            <textarea id="contribution" name="contribution" maxlength="2000"
+              placeholder="اذكر المهارات أو الأفكار التي ترغب في المساهمة بها"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="weeklyHours">الوقت المتاح أسبوعيًا</label>
+            <select id="weeklyHours" name="weeklyHours">
+              <option value="">اختر الوقت</option>
+              <option>أقل من 3 ساعات</option>
+              <option>3–5 ساعات</option>
+              <option>6–10 ساعات</option>
+              <option>أكثر من 10 ساعات</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="consent">
+          <input type="checkbox" id="consent" name="consent" required>
+          <label for="consent">
+            أوافق على استخدام المعلومات التي أقدمها لغرض دراسة طلب انتسابي
+            وإدارة عملية الانتساب، وأقر بأن المعلومات المدخلة صحيحة.
+            <span class="required">*</span>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitButton">
+            إرسال طلب الانتساب
+          </button>
+          <button type="reset" class="btn btn-dark" id="resetButton">
+            مسح النموذج
+          </button>
+        </div>
+
+        <div id="applicationMessage" class="status-box" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section class="panel" id="trackerSection">
+      <h2 class="section-title">متابعة طلب الانتساب</h2>
+      <p class="section-subtitle">
+        أدخل رقم الطلب والبريد الإلكتروني المستخدم عند التقديم.
+      </p>
+
+      <form id="trackerForm">
+        <div class="tracker">
+          <div class="form-group">
+            <label for="trackingId">رقم الطلب</label>
+            <input id="trackingId" name="trackingId" required
+              placeholder="WT-JOIN-2026-00001" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="trackingEmail">البريد الإلكتروني</label>
+            <input id="trackingEmail" name="trackingEmail" type="email" required>
+          </div>
+
+          <button class="btn btn-dark" type="submit" id="trackButton">
+            متابعة الطلب
+          </button>
+        </div>
+      </form>
+
+      <div id="trackingMessage" class="status-box" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><strong>فريق وطن تِك | WATAN TECH</strong></p>
+    <p>نبتكر. نربط. نُغيّر.</p>
+    <small>منصة الانتساب الإلكترونية</small>
+  </footer>
+
+  <script>
+    'use strict';
+
+    const applicationForm = document.getElementById('applicationForm');
+    const submitButton = document.getElementById('submitButton');
+    const applicationMessage = document.getElementById('applicationMessage');
+
+    const trackerForm = document.getElementById('trackerForm');
+    const trackButton = document.getElementById('trackButton');
+    const trackingMessage = document.getElementById('trackingMessage');
+
+    function scrollToApplication() {
+      document.getElementById('applicationSection').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+    function scrollToTracker() {
+      document.getElementById('trackerSection').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+    function showMessage(element, message, type) {
+      element.className = 'status-box ' + type;
+      element.textContent = message;
+    }
+
+    function setBusy(button, busy, busyText, normalText) {
+      button.disabled = busy;
+      button.textContent = busy ? busyText : normalText;
+    }
+
+    function getErrorMessage(error, fallback) {
+      return error && error.message ? error.message : fallback;
+    }
+
+    applicationForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      if (!applicationForm.reportValidity()) return;
+
+      if (!document.getElementById('consent').checked) {
+        showMessage(
+          applicationMessage,
+          'يرجى الموافقة على استخدام البيانات قبل الإرسال.',
+          'error'
+        );
+        return;
+      }
+
+      const formData = new FormData(applicationForm);
+      const data = {};
+
+      formData.forEach(function(value, key) {
+        data[key] = value;
+      });
+
+      data.consent = document.getElementById('consent').checked;
+
+      setBusy(submitButton, true, 'جارٍ إرسال الطلب...', 'إرسال طلب الانتساب');
+      showMessage(applicationMessage, 'يرجى الانتظار حتى يتم حفظ طلبك.', 'loading');
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          setBusy(submitButton, false, '', 'إرسال طلب الانتساب');
+
+          if (!result || !result.success || !result.applicationId) {
+            showMessage(
+              applicationMessage,
+              'تعذر تأكيد الطلب. يرجى المحاولة مرة أخرى.',
+              'error'
+            );
+            return;
+          }
+
+          applicationMessage.className = 'status-box success';
+          applicationMessage.replaceChildren();
+
+          const heading = document.createElement('strong');
+          heading.textContent = 'تم استلام طلبك بنجاح.';
+
+          const idParagraph = document.createElement('p');
+          idParagraph.textContent = 'رقم طلبك: ' + result.applicationId;
+
+          const statusParagraph = document.createElement('p');
+          statusParagraph.textContent = 'حالة الطلب: ' + (result.status || 'قيد المراجعة');
+
+          const note = document.createElement('p');
+          note.textContent = 'احتفظ برقم الطلب والبريد الإلكتروني لمتابعة طلبك لاحقًا.';
+
+          applicationMessage.append(heading, idParagraph, statusParagraph, note);
+
+          document.getElementById('trackingId').value = result.applicationId;
+          document.getElementById('trackingEmail').value = data.email || '';
+
+          applicationForm.reset();
+
+          applicationMessage.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        })
+        .withFailureHandler(function(error) {
+          setBusy(submitButton, false, '', 'إرسال طلب الانتساب');
+          showMessage(
+            applicationMessage,
+            getErrorMessage(error, 'حدث خطأ أثناء إرسال الطلب.'),
+            'error'
+          );
+        })
+        .submitApplication(data);
+    });
+
+    trackerForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      if (!trackerForm.reportValidity()) return;
+
+      const applicationId = document.getElementById('trackingId').value.trim();
+      const email = document.getElementById('trackingEmail').value.trim();
+
+      setBusy(trackButton, true, 'جارٍ البحث...', 'متابعة الطلب');
+      showMessage(trackingMessage, 'جارٍ البحث عن طلبك.', 'loading');
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          setBusy(trackButton, false, '', 'متابعة الطلب');
+
+          if (!result || !result.success) {
+            showMessage(
+              trackingMessage,
+              'لم نتمكن من استرجاع بيانات الطلب.',
+              'error'
+            );
+            return;
+          }
+
+          trackingMessage.className = 'status-box success';
+          trackingMessage.replaceChildren();
+
+          const heading = document.createElement('strong');
+          heading.textContent = 'تم العثور على الطلب';
+
+          const name = document.createElement('p');
+          name.textContent = 'الاسم: ' + (result.name || '');
+
+          const id = document.createElement('p');
+          id.textContent = 'رقم الطلب: ' + (result.applicationId || applicationId);
+
+          const status = document.createElement('p');
+          status.textContent = 'حالة الطلب: ' + (result.status || 'غير محددة');
+
+          const submittedAt = document.createElement('p');
+          submittedAt.textContent = 'تاريخ التقديم: ' + (result.submittedAt || 'غير متوفر');
+
+          trackingMessage.append(heading, name, id, status, submittedAt);
+        })
+        .withFailureHandler(function(error) {
+          setBusy(trackButton, false, '', 'متابعة الطلب');
+          showMessage(
+            trackingMessage,
+            getErrorMessage(
+              error,
+              'حدث خطأ أثناء متابعة الطلب. يرجى المحاولة مرة أخرى.'
+            ),
+            'error'
+          );
+        })
+        .getApplicationStatus(applicationId, email);
+    });
+
+    applicationForm.addEventListener('reset', function() {
+      window.setTimeout(function() {
+        applicationMessage.className = 'status-box';
+        applicationMessage.textContent = '';
+      }, 0);
+    });
+  </script>
+</body>
+</html>
